@@ -2,11 +2,14 @@
 var express = require("express"); //import NPM express
 var app = express(); //initialize app with express
 var request = require("request"); //import NPM require
+var methodOverride = require("method-override");
+app.use(methodOverride("_method"));
 var bodyParser = require("body-parser"); //import NPM body-parser
 app.use(bodyParser.urlencoded({extended: true})); //setting body-parser
 app.set("view engine", "ejs"); //setting ejs as standard
 
 //DATABASE INITIALIZATION
+//REMEMBER TO START MONGOD IN ANOTHER TERMINAL
 var mongoose = require("mongoose");
 mongoose.connect("mongodb://localhost/YelpCamp",{ useNewUrlParser: true });
 var campSchema = new mongoose.Schema({ //creating Schema
@@ -16,7 +19,7 @@ var campSchema = new mongoose.Schema({ //creating Schema
 var Camp = mongoose.model("Camp", campSchema); //creating model and collection
 
 //CREATE INITIAL CAMPS
-// Camp.create({"name" : "Canto dos Pássaros", "image" : "https://media-cdn.tripadvisor.com/media/photo-s/05/cc/a4/95/canto-dos-passaros-hospedagem.jpg",description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim ut sem viverra aliquet eget sit amet."},
+// Camp.create({"name" : "Canto dos Pรกssaros", "image" : "https://media-cdn.tripadvisor.com/media/photo-s/05/cc/a4/95/canto-dos-passaros-hospedagem.jpg",description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim ut sem viverra aliquet eget sit amet."},
 // (err,camp)=>{
 // 	if(!err){
 // 		console.log(camp);
@@ -35,7 +38,7 @@ var Camp = mongoose.model("Camp", campSchema); //creating model and collection
 // 	}
 // });
 
-//LADING PAGE
+//LANDING PAGE
 app.get("/", (req,res)=>{
 	//render views page
 	res.render("landing");
@@ -80,7 +83,27 @@ app.get("/campgrounds/:id/edit", (req,res)=>{
 			res.render("edit",{camp:camp});
 		}
 	});
-})
+});
+
+//UPDATE - UPDATE INFORMATIONS IN CAMP GROUND
+app.put("/campgrounds/:id",(req,res)=>{
+	Camp.findByIdAndUpdate(req.params.id,req.body.camp, (err,camp)=>{
+		if(!err){
+			//redirect to get /campgrounds
+			res.redirect("/campgrounds/" + req.params.id);
+		}
+	});
+});
+
+//DESTROY - DELETES A CAMP GROUND
+app.delete("/campgrounds/:id",(req,res)=>{
+	Camp.findByIdAndRemove(req.params.id,(err,camp)=>{
+		if(!err){
+			//redirect to get /campgrounds
+			res.redirect("/campgrounds");
+		}
+	});
+});
 
 //CREATE - CREATE NEW CAMP GROUNDS
 app.post("/campgrounds", (req,res)=>{
