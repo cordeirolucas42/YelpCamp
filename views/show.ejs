@@ -1,0 +1,20 @@
+<% include partials/header %>
+
+<div class="container" style="margin-top:70px;">
+	<div class="card" style="width: 40rem;">
+		<img src=<%= camp.image %> class="card-img-top" >
+		<div class="card-body">
+			<h5 class="card-title">
+				<%= camp.name %>
+			</h5>
+			<p class="card-text">
+				<%= camp.description %>
+			</p>
+			<a href=<%= "/campgrounds/" + camp._id + "/edit" %> class="btn btn-primary">Edit</a>
+			<a href="#" class="btn btn-primary">Remove</a>
+			<a href="/campgrounds" class="btn btn-primary">Go Back</a>
+		</div>
+	</div>
+</div>
+
+<% include partials/footer %>
