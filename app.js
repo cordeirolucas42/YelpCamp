@@ -5,14 +5,35 @@ var request = require("request"); //import NPM require
 var bodyParser = require("body-parser"); //import NPM body-parser
 app.use(bodyParser.urlencoded({extended: true})); //setting body-parser
 app.set("view engine", "ejs"); //setting ejs as standard
+var theport = process.env.PORT || 5000;
 
 //DATABASE INITIALIZATION
+//REMEMBER TO START MONGOD IN ANOTHER TERMINAL
 var mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost/YelpCamp",{ useNewUrlParser: true });
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+var uri = 'mongodb://cordeirolucas42:jogodavelha125@ds211368.mlab.com:11368/heroku_kwqtcvpl';
+var options = {
+	"server": {
+		"socketOptions": {
+			"keepAlive": 300000,
+			"connectTimeoutMS": 30000
+		}
+	},
+	"replset": {
+		"socketOptions": {
+			"keepAlive": 300000,
+			"connectTimeoutMS": 30000
+		}
+	}
+}
+mongoose.connect(uri, options);
 var campSchema = new mongoose.Schema({ //creating Schema
-   name: String,
-   image: String,
-   description: String});
+	source: String,
+	position: Number,
+	description: String
+});
 var Camp = mongoose.model("Camp", campSchema); //creating model and collection
 
 //CREATE INITIAL CAMPS
@@ -96,4 +117,4 @@ app.post("/campgrounds", (req,res)=>{
 });
 
 // START SERVER
-app.listen(3000);
+app.listen(theport);
