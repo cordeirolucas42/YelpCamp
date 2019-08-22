@@ -39,25 +39,25 @@ var campSchema = new mongoose.Schema({ //creating Schema
 });
 var Camp = mongoose.model("Camp", campSchema); //creating model and collection
 
-//CREATE INITIAL CAMPS
-Camp.create({"name" : "Canto dos Pรกssaros", "image" : "https://media-cdn.tripadvisor.com/media/photo-s/05/cc/a4/95/canto-dos-passaros-hospedagem.jpg",description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim ut sem viverra aliquet eget sit amet."},
-(err,camp)=>{
-	if(!err){
-		console.log(camp);
-	}
-});
-Camp.create({"name" : "Salmon Creek", "image" : "https://farm9.staticflickr.com/8442/7962474612_bf2baf67c0.jpg",description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim ut sem viverra aliquet eget sit amet."},
-(err,camp)=>{
-	if(!err){
-		console.log(camp);
-	}
-});
-Camp.create({"name" : "Mountain Goat's Rest", "image" : "https://farm7.staticflickr.com/6057/6234565071_4d20668bbd.jpg",description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim ut sem viverra aliquet eget sit amet."},
-(err,camp)=>{
-	if(!err){
-		console.log(camp);
-	}
-});
+// //CREATE INITIAL CAMPS
+// Camp.create({"name" : "Canto dos Pรกssaros", "image" : "https://media-cdn.tripadvisor.com/media/photo-s/05/cc/a4/95/canto-dos-passaros-hospedagem.jpg",description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim ut sem viverra aliquet eget sit amet."},
+// (err,camp)=>{
+// 	if(!err){
+// 		console.log(camp);
+// 	}
+// });
+// Camp.create({"name" : "Salmon Creek", "image" : "https://farm9.staticflickr.com/8442/7962474612_bf2baf67c0.jpg",description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim ut sem viverra aliquet eget sit amet."},
+// (err,camp)=>{
+// 	if(!err){
+// 		console.log(camp);
+// 	}
+// });
+// Camp.create({"name" : "Mountain Goat's Rest", "image" : "https://farm7.staticflickr.com/6057/6234565071_4d20668bbd.jpg",description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim ut sem viverra aliquet eget sit amet."},
+// (err,camp)=>{
+// 	if(!err){
+// 		console.log(camp);
+// 	}
+// });
 
 //LANDING PAGE
 app.get("/", (req,res)=>{
