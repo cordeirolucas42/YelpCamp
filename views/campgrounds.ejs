@@ -17,10 +17,10 @@
 	<div class="row text-center">
 			<% campgrounds.forEach((campground)=>{ %>
 			<div class="col-lg-4 col-sm-6 p-3">	
-				<div>
-					<a href= "/campgrounds/<%=campground._id %>" ><img src="<%=campground.image%>"></a>
-					<div>
-						<p>
+				<div class="card">
+					<a href= "/campgrounds/<%=campground._id %>"><img class="card-img-top" src="<%=campground.image%>"></a>
+					<div class="card-body">
+						<p class="lead">
 							<%= campground.name %>
 						</p>
 					</div>
