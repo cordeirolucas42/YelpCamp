@@ -2,15 +2,15 @@
 
 <div class="container" style="margin-top:70px;">
 	<h3 class="text-center pt-3">
-	Create a New Campground
+	Edit Campground
 	</h3>
-	<div class="mx-auto my-4" style="width:30%">
-		<form action="/campgrounds" method="POST">
+	<div class="mx-auto my-4" style="width:45%">
+		<form action="/campgrounds/<%=camp._id %>?_method=PUT" method="POST">
 			<div class="form-group">
-				<textarea class="form-control" name="camp[name]" rows="1"><%= camp.name %></textarea>
+				<input class="form-control" name="camp[name]" value="<%= camp.name %>" >
 			</div>
 			<div class="form-group">
-				<input class="form-control" type="text" name="camp[image]" value=<%= camp.image %> >
+				<input class="form-control" type="text" name="camp[image]" value="<%= camp.image %>" >
 			</div>
 			<div class="form-group">
 				<textarea class="form-control" name="camp[description]" rows="5"><%= camp.description %></textarea>
@@ -19,7 +19,7 @@
 				<button class="btn btn-sm btn-primary" style="width:100%;" type="submit">Submit</button>
 			</div>	
 		</form>
-		<a href=<%= "/campgrounds/" + camp._id %> >Go Back</a>
+		<a href="<%= "/campgrounds/" + camp._id %>" >Go Back</a>
 	</div>	
 </div>
 
