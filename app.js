@@ -32,12 +32,10 @@ var options = {
 	}
 }
 mongoose.connect(uri, options);
-var campSchema = new mongoose.Schema({ //creating Schema
-	name: String,
-	image: String,
-	description: String
-});
-var Camp = mongoose.model("Camp", campSchema); //creating model and collection
+seedDB = require("./seeds");
+seedDB();
+var Camp = require("./models/campground");
+var Comment = require("./models/comment");
 
 // //CREATE INITIAL CAMPS
 // Camp.create({"name" : "Canto dos Pรกssaros", "image" : "https://media-cdn.tripadvisor.com/media/photo-s/05/cc/a4/95/canto-dos-passaros-hospedagem.jpg",description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim ut sem viverra aliquet eget sit amet."},
