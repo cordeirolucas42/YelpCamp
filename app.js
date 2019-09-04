@@ -37,26 +37,6 @@ seedDB();
 var Camp = require("./models/campground");
 var Comment = require("./models/comment");
 
-// //CREATE INITIAL CAMPS
-// Camp.create({"name" : "Canto dos Pรกssaros", "image" : "https://media-cdn.tripadvisor.com/media/photo-s/05/cc/a4/95/canto-dos-passaros-hospedagem.jpg",description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim ut sem viverra aliquet eget sit amet."},
-// (err,camp)=>{
-// 	if(!err){
-// 		console.log(camp);
-// 	}
-// });
-// Camp.create({"name" : "Salmon Creek", "image" : "https://farm9.staticflickr.com/8442/7962474612_bf2baf67c0.jpg",description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim ut sem viverra aliquet eget sit amet."},
-// (err,camp)=>{
-// 	if(!err){
-// 		console.log(camp);
-// 	}
-// });
-// Camp.create({"name" : "Mountain Goat's Rest", "image" : "https://farm7.staticflickr.com/6057/6234565071_4d20668bbd.jpg",description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim ut sem viverra aliquet eget sit amet."},
-// (err,camp)=>{
-// 	if(!err){
-// 		console.log(camp);
-// 	}
-// });
-
 //LANDING PAGE
 app.get("/", (req,res)=>{
 	//render views page
@@ -69,7 +49,7 @@ app.get("/campgrounds", (req,res)=>{
 	Camp.find({},(err,campgrounds)=>{
 		if(!err){
 			//render views page
-			res.render("campgrounds",{campgrounds:campgrounds});
+			res.render("campgrounds/campgrounds",{campgrounds:campgrounds});
 		}
 	});	
 });
@@ -77,7 +57,7 @@ app.get("/campgrounds", (req,res)=>{
 //NEW - FORM TO MAKE A NEW CAMPGROUND
 app.get("/campgrounds/new", (req,res)=>{
 	//render views page
-	res.render("new");
+	res.render("campgrounds/new");
 });
 
 //SHOW - PAGE FOR EACH CAMPGROUND
@@ -85,9 +65,10 @@ app.get("/campgrounds/:id", (req,res)=>{
 	//get data from get request
 	var id = req.params.id;
 	//acces database to get specific campground
-	Camp.findById(id,(err,camp)=>{
+	Camp.findById(id).populate("comments").exec(function(err,camp){
 		if(!err){
-			res.render("show",{camp:camp});
+			console.log(camp);
+			res.render("campgrounds/show",{camp:camp});
 		}
 	});
 });
@@ -99,7 +80,7 @@ app.get("/campgrounds/:id/edit", (req,res)=>{
 	//acces database to get specific campground
 	Camp.findById(id,(err,camp)=>{
 		if(!err){
-			res.render("edit",{camp:camp});
+			res.render("campgrounds/edit",{camp:camp});
 		}
 	});
 });
@@ -135,6 +116,39 @@ app.post("/campgrounds", (req,res)=>{
 			res.redirect("/campgrounds");
 		}
 	});	
+});
+
+// app.get("/campgrounds/:id/comments", (req,res)=>{
+
+// });
+
+app.get("/campgrounds/:id/comments/new", (req,res)=>{
+	//get data from get request
+	var id = req.params.id;
+	//acces database to get specific campground
+	Camp.findById(id).populate("comments").exec(function(err,camp){
+		if(!err){
+			console.log(camp);
+			res.render("comments/new",{camp:camp});
+		}
+	});
+});
+
+app.post("/campgrounds/:id/comments", (req,res)=>{
+	//get data from get request
+	var id = req.params.id;
+	//acces database to get specific campground
+	Camp.findById(id).exec(function(err,camp){
+		if(!err){
+			Comment.create(req.body.comment,(err,comment)=>{
+				if(!err){
+					camp.comments.push(comment);
+					camp.save();
+					res.redirect("/campgrounds/"+camp._id);
+				}
+			});			
+		}
+	});
 });
 
 // START SERVER
