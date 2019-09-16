@@ -1,6 +1,8 @@
 // APP INITIALIZATION
 var express = require("express"); //import NPM express
 var app = express(); //initialize app with express
+var passport = require("passport");
+var localStrategy = require("passport-local");
 var request = require("request"); //import NPM require
 var methodOverride = require("method-override");
 app.use(methodOverride("_method"));
@@ -33,9 +35,28 @@ var options = {
 }
 mongoose.connect(uri, options);
 seedDB = require("./seeds");
-seedDB();
+// seedDB();
 var Camp = require("./models/campground");
 var Comment = require("./models/comment");
+var User = require("./models/user");
+
+//PASSPORT CONFIGURATION
+app.use(require("express-session")({
+	secret: "yada yada yada",
+	resave: false,
+	saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new localStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+//MIDDLEWARE
+app.use((req,res,next)=>{
+	res.locals.currentUser = req.user;
+	next();
+});
 
 //LANDING PAGE
 app.get("/", (req,res)=>{
@@ -118,11 +139,7 @@ app.post("/campgrounds", (req,res)=>{
 	});	
 });
 
-// app.get("/campgrounds/:id/comments", (req,res)=>{
-
-// });
-
-app.get("/campgrounds/:id/comments/new", (req,res)=>{
+app.get("/campgrounds/:id/comments/new", isLoggedIn, (req,res)=>{
 	//get data from get request
 	var id = req.params.id;
 	//acces database to get specific campground
@@ -134,13 +151,14 @@ app.get("/campgrounds/:id/comments/new", (req,res)=>{
 	});
 });
 
-app.post("/campgrounds/:id/comments", (req,res)=>{
+app.post("/campgrounds/:id/comments", isLoggedIn, (req,res)=>{
 	//get data from get request
 	var id = req.params.id;
+	var newComment = {text: req.body.comment, author: req.user.username};
 	//acces database to get specific campground
 	Camp.findById(id).exec(function(err,camp){
 		if(!err){
-			Comment.create(req.body.comment,(err,comment)=>{
+			Comment.create(newComment,(err,comment)=>{
 				if(!err){
 					camp.comments.push(comment);
 					camp.save();
@@ -150,6 +168,48 @@ app.post("/campgrounds/:id/comments", (req,res)=>{
 		}
 	});
 });
+
+//AUTH ROUTES
+app.get("/register",(req,res)=>{
+	res.render("register");
+});
+
+app.post("/register",(req,res)=>{
+	var newUser = new User({username: req.body.username});
+	User.register(newUser, req.body.password, (err,user)=>{
+		if(err){
+			console.log(err);
+			return res.render("register");
+		} else {
+			passport.authenticate("local")(req,res,function(){
+				res.redirect("/campgrounds");
+			});
+		}
+	});
+});
+
+app.get("/login",(req,res)=>{
+	res.render("login");
+});
+
+app.post("/login",passport.authenticate("local",{
+    successRedirect: "/campgrounds",
+    failureRedirect: "/login"
+}),(req,res)=>{}
+);
+
+app.get("/logout",(req,res)=>{
+    req.logout();
+    res.redirect("/login");
+});
+
+//MIDDLEWARE
+function isLoggedIn(req,res,next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect("/login");
+}
 
 // START SERVER
 app.listen(theport,function(err){
