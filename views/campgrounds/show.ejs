@@ -10,6 +10,9 @@
 			<p class="card-text">
 				<%= camp.description %>
 			</p>
+			<p class="card-text">
+				<em>Submitted by <%= camp.author.username %></em>
+			</p>
 
 			<a href="/campgrounds/<%=camp._id%>/edit"  class="btn btn-primary">Edit</a>
 			<form style="display:inline;" action="/campgrounds/<%=camp._id%>?_method=DELETE" method="POST">
@@ -27,7 +30,7 @@
 			<% camp.comments.forEach(function(comment){ %>
 				<div class="row">
 					<div class="col-12">
-						<strong><%=comment.author%></strong>
+						<strong><%=comment.author.username%></strong>
 						<span class="float-right">10 days ago</span>
 						<p>
 							<%=comment.text%>
