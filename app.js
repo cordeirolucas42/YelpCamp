@@ -25,7 +25,7 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 // heroku config:get MONGODB_URI 
 var uri = 'mongodb://heroku_kwqtcvpl:6vc6v5m55i5v41jb0tj5hejgvl@ds211368.mlab.com:11368/heroku_kwqtcvpl';
-mongoose.connect(process.env.MONGODBURI);
+mongoose.connect(process.env.MONGODB_URI);
 
 // //SEEDING THE DATABASE
 // seedDB = require("./seeds");
