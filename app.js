@@ -3,6 +3,8 @@ var express = require("express"); //import NPM express
 var app = express(); //initialize app with express
 var passport = require("passport");
 var localStrategy = require("passport-local");
+var flash = require("connect-flash");
+app.use(flash());
 var methodOverride = require("method-override");
 app.use(methodOverride("_method"));
 var bodyParser = require("body-parser"); //import NPM body-parser
@@ -46,6 +48,8 @@ passport.deserializeUser(User.deserializeUser());
 //MIDDLEWARE
 app.use((req,res,next)=>{
 	res.locals.currentUser = req.user;
+	res.locals.error = req.flash("error");
+	res.locals.success = req.flash("success");
 	next();
 });
 
