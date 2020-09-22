@@ -23,8 +23,7 @@ var mongoose = require("mongoose");
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
-// heroku config:get MONGODB_URI
-mongoose.connect(process.env.MONGODB_URI);
+mongoose.connect(process.env.DB_URI);
 
 // //SEEDING THE DATABASE
 // seedDB = require("./seeds");
